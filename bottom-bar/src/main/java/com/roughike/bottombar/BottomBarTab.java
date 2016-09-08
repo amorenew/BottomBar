@@ -14,6 +14,7 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v7.widget.AppCompatImageView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -62,7 +63,7 @@ public class BottomBarTab extends LinearLayout {
     private int indexInContainer;
 
     @VisibleForTesting
-    BottomBarBadge badge;
+    BadgeView badge;
     private int titleTextAppearanceResId;
     private Typeface titleTypeFace;
 
@@ -284,8 +285,8 @@ public class BottomBarTab extends LinearLayout {
         return 0;
     }
 
-    public void setBadgeCount(int count) {
-        if (count <= 0) {
+    public void setBadgeCount(String count) {
+        if (TextUtils.isEmpty(count)) {
             if (badge != null) {
                 badge.removeFromTab(this);
                 badge = null;
@@ -295,7 +296,7 @@ public class BottomBarTab extends LinearLayout {
         }
 
         if (badge == null) {
-            badge = new BottomBarBadge(getContext());
+            badge = new BadgeView(getContext());
             badge.attachToTab(this, badgeBackgroundColor);
         }
 
@@ -303,7 +304,7 @@ public class BottomBarTab extends LinearLayout {
     }
 
     public void removeBadge() {
-        setBadgeCount(0);
+        setBadgeCount("");
     }
 
     boolean isActive() {

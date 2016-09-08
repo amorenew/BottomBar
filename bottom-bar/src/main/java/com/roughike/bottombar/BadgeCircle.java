@@ -18,7 +18,7 @@
 package com.roughike.bottombar;
 
 import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
+import android.graphics.drawable.shapes.RoundRectShape;
 
 /*
  * BottomBar library for Android
@@ -37,17 +37,16 @@ import android.graphics.drawable.shapes.OvalShape;
  * limitations under the License.
  */
 class BadgeCircle {
+
     /**
      * Creates a new circle for the Badge background.
      *
-     * @param size  the width and height for the circle
      * @param color the activeIconColor for the circle
      * @return a nice and adorable circle.
      */
-    static ShapeDrawable make(int size, int color) {
-        ShapeDrawable indicator = new ShapeDrawable(new OvalShape());
-        indicator.setIntrinsicWidth(size);
-        indicator.setIntrinsicHeight(size);
+    static ShapeDrawable make(int color) {
+        float[] outerR = new float[]{40, 40, 40, 40, 40, 40, 40, 40};
+        ShapeDrawable indicator = new ShapeDrawable(new RoundRectShape(outerR, null, null));
         indicator.getPaint().setColor(color);
         return indicator;
     }

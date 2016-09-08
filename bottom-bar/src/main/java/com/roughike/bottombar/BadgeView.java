@@ -30,14 +30,16 @@ import android.widget.TextView;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-class BottomBarBadge extends TextView {
+public class BadgeView extends TextView {
+
     @VisibleForTesting
     static final String STATE_COUNT = "STATE_BADGE_COUNT_FOR_TAB_";
 
-    private int count;
+    private String count;
+
     private boolean isVisible = false;
 
-    BottomBarBadge(Context context) {
+    BadgeView(Context context) {
         super(context);
     }
 
@@ -46,9 +48,9 @@ class BottomBarBadge extends TextView {
      *
      * @param count the value this Badge should show.
      */
-    void setCount(int count) {
+    void setCount(String count) {
         this.count = count;
-        setText(String.valueOf(count));
+        setText(count);
     }
 
     /**
@@ -56,7 +58,7 @@ class BottomBarBadge extends TextView {
      *
      * @return current count for the Badge.
      */
-    int getCount() {
+    String getCount() {
         return count;
     }
 
@@ -108,9 +110,9 @@ class BottomBarBadge extends TextView {
     }
 
     void setColoredCircleBackground(int circleColor) {
-        int innerPadding = MiscUtils.dpToPixel(getContext(), 1);
-        ShapeDrawable backgroundCircle = BadgeCircle.make(innerPadding * 3, circleColor);
-        setPadding(innerPadding, innerPadding, innerPadding, innerPadding);
+        int widthPadding = MiscUtils.dpToPixel(getContext(), 4);
+        ShapeDrawable backgroundCircle = BadgeCircle.make(circleColor);
+        setPadding(widthPadding, 0, widthPadding, 0);
         setBackgroundCompat(backgroundCircle);
     }
 
@@ -148,9 +150,6 @@ class BottomBarBadge extends TextView {
 
     void adjustPositionAndSize(BottomBarTab tab) {
         AppCompatImageView iconView = tab.getIconView();
-        ViewGroup.LayoutParams params = getLayoutParams();
-
-        int size = Math.max(getWidth(), getHeight());
         float xOffset = iconView.getWidth();
 
         if (tab.getType() == BottomBarTab.Type.TABLET) {
@@ -160,11 +159,6 @@ class BottomBarBadge extends TextView {
         setX(iconView.getX() + xOffset);
         setTranslationY(10);
 
-        if (params.width != size || params.height != size) {
-            params.width = size;
-            params.height = size;
-            setLayoutParams(params);
-        }
     }
 
     @SuppressWarnings("deprecation")
@@ -178,11 +172,11 @@ class BottomBarBadge extends TextView {
 
     Bundle saveState(int tabIndex) {
         Bundle state = new Bundle();
-        state.putInt(STATE_COUNT + tabIndex, count);
+        state.putString(STATE_COUNT + tabIndex, count);
         return state;
     }
 
     void restoreState(Bundle bundle, int tabIndex) {
-        setCount(bundle.getInt(STATE_COUNT + tabIndex, count));
+        setCount(bundle.getString(STATE_COUNT + tabIndex, count));
     }
 }
