@@ -11,8 +11,8 @@ ext {
 
     libraryDescription = 'A custom view component that mimics the Material Design "Bottom navigation" pattern.'
 
-    siteUrl = 'https://github.com/roughike/BottomBar'
-    gitUrl = 'https://github.com/roughike/BottomBar.git'
+    siteUrl = 'https://github.com/cookych/BottomBar'
+    gitUrl = 'https://github.com/cookych/BottomBar.git'
 
     libraryVersion = '2.0.2'
 
