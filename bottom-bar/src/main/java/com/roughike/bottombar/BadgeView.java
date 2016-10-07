@@ -152,9 +152,10 @@ public class BadgeView extends TextView {
         AppCompatImageView iconView = tab.getIconView();
         float xOffset = iconView.getWidth();
 
-        if (tab.getType() == BottomBarTab.Type.TABLET) {
+        // not using
+        // if (tab.getType() == BottomBarTab.Type.TABLET) {
             xOffset /= 1.25;
-        }
+        //}
 
         setX(iconView.getX() + xOffset);
         setTranslationY(10);
