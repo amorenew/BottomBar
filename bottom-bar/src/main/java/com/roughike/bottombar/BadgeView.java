@@ -4,8 +4,8 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.VisibleForTesting;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.Gravity;
@@ -31,9 +31,6 @@ import android.widget.TextView;
  * limitations under the License.
  */
 public class BadgeView extends TextView {
-
-    @VisibleForTesting
-    static final String STATE_COUNT = "STATE_BADGE_COUNT_FOR_TAB_";
 
     private String count;
 
@@ -171,13 +168,54 @@ public class BadgeView extends TextView {
         }
     }
 
-    Bundle saveState(int tabIndex) {
-        Bundle state = new Bundle();
-        state.putString(STATE_COUNT + tabIndex, count);
-        return state;
+    @Override
+    public Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+        SavedState ss = new SavedState(superState);
+        ss.savedCount = this.count;
+        return ss;
     }
 
-    void restoreState(Bundle bundle, int tabIndex) {
-        setCount(bundle.getString(STATE_COUNT + tabIndex, count));
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        if (!(state instanceof SavedState)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+        SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+        this.count = ss.savedCount;
+        setCount(count);
+    }
+
+    static class SavedState extends BaseSavedState {
+
+        String savedCount;
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            this.savedCount = in.readString();
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeString(this.savedCount);
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Parcelable.Creator<SavedState>() {
+                    public SavedState createFromParcel(Parcel in) {
+                        return new SavedState(in);
+                    }
+
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                };
     }
 }
